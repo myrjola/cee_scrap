@@ -1,0 +1,14 @@
+a = 1;
+print a;
+b = 1000 + a;
+print b;
+c = 1000000 - b;
+print c;
+d = c * 2;
+print d;
+e = d / b;
+print e;
+f = d / (c - (b + a));
+print f;
+g = -4;
+print g;
