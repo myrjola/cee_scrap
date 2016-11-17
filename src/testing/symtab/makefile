@@ -38,7 +38,7 @@ CPP_SOURCES = main.cpp ../../ast/ast.cpp ../../io/reporter.cpp \
 
 # Linux
 GCCCPP = g++
-GCCCPPFLAGS = -Wall
+GCCCPPFLAGS = -Wall -std=c++0x
 GCCLINKFLAGS = -Wall
 LINUXOBJECTS = $(C_SOURCES:.c=.o) $(CPP_SOURCES:.cpp=.o)
 

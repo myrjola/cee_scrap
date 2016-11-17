@@ -98,6 +98,8 @@ public:
 
 private:
   /* TASK: Add whatever private members and methods you find necessary */
+  std::map<std::string, Record*> symbol_map;
+  unsigned int memory_index_counter = 0;
 
 public:
   /**

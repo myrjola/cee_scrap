@@ -1,32 +1,46 @@
-
 #include "symbol_table.hpp"
 #include <cstddef>
 
 using std::string;
 
-SymbolTable::SymbolTable(void)
-{
-  /* TASK: Add whatever code you find necessary */
-}
+SymbolTable::SymbolTable(void) {}
 
 SymbolTable::~SymbolTable(void) {
-  /* TASK: Add whatever code you find necessary */
+  clear();
 }
 
 SymbolTable::Record* SymbolTable::lookUp(const string& name) const {
-  /* TASK: Implement this method */
+  try {
+    return symbol_map.at(name);
+  } catch (const std::out_of_range& e) {
+    return NULL;
+  }
 }
 
 bool SymbolTable::insert(const string& name, int line, int column) {
-  /* TASK: Implement this method */
+  Record* record = new Record(name, line, column, memory_index_counter++);
+  symbol_map.insert(std::make_pair(name, record));
+  return true;
 }
 
 void SymbolTable::clear(void) {
-  /* TASK: Implement this method */
+  // Destroy all records
+  std::map<string, Record*>::const_iterator it;
+  for (it = symbol_map.begin(); it != symbol_map.end(); it++) {
+    delete it->second;
+  }
+
+  symbol_map.clear();
 }
 
-list<SymbolTable::Record*> SymbolTable::getRecords(void) const {
-  /* TASK: Implement this method */
+std::list<SymbolTable::Record*> SymbolTable::getRecords(void) const {
+  std::list<Record*> records;
+  std::transform(symbol_map.begin(), symbol_map.end(),
+                 std::back_inserter(records),
+                 [](std::pair<string, Record*> val) {
+                   return val.second;
+                 });
+  return records;
 }
 
 SymbolTable::Record::Record(
