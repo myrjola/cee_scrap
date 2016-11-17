@@ -1,0 +1,8 @@
+* Task 2: Implement the parser
+
+Bison syntax
+
+=@$= location of the whole grouping. You can get the line/column numbers.
+=@1= location of subexpression $1. You can get the line/column numbers.
+
+~$<var>$ = stmt~ var in the =%union= is set to stmt.
