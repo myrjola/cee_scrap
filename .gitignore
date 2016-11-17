@@ -6,3 +6,5 @@
 /src/grammar/lex.yy.c
 /src/grammar/parser.tab.c
 /src/testing/parser/parser
+/src/.dir-locals.el
+/src/testing/symtab/symtab

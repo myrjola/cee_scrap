@@ -19,8 +19,8 @@ SymbolTable::Record* SymbolTable::lookUp(const string& name) const {
 
 bool SymbolTable::insert(const string& name, int line, int column) {
   Record* record = new Record(name, line, column, memory_index_counter++);
-  symbol_map.insert(std::make_pair(name, record));
-  return true;
+  // Will return true if the element was inserted.
+  return symbol_map.insert(std::make_pair(name, record)).second;
 }
 
 void SymbolTable::clear(void) {

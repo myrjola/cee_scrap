@@ -1,6 +1,7 @@
 /*
  *  Copyright:
  *     Gabriel Hjort Blindell, 2012
+ *     Martin Yrjölä, 2016
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
@@ -43,28 +44,79 @@
  * detected.
  */
 class SymbolTableBuilder : public AST::DefaultVisitor {
-  public:
-    /**
-     * Builds a symbol table and checks that no variables are redefined or
-     * used before having been declared. If the program is semantically
-     * invalid, an error is reported and \c false is returned.
-     *
-     * The given table will be cleared before the build to ensure a clean
-     * table. If an error is encountered, the state of the symbol table is
-     * undefined.
-     *
-     * @param node
-     *        Program node.
-     * @param symtab
-     *        Symbol table to build upon.
-     * @returns \c true if the symbol table was successfully built.
-     */
-    bool build(AST::NProgram* node, SymbolTable* symtab);
+public:
+  /**
+   * Builds a symbol table and checks that no variables are redefined or
+   * used before having been declared. If the program is semantically
+   * invalid, an error is reported and \c false is returned.
+   *
+   * The given table will be cleared before the build to ensure a clean
+   * table. If an error is encountered, the state of the symbol table is
+   * undefined.
+   *
+   * @param node
+   *        Program node.
+   * @param symtab
+   *        Symbol table to build upon.
+   * @returns \c true if the symbol table was successfully built.
+   */
+  bool build(AST::NProgram* node, SymbolTable* symtab);
 
-    /* TASK: Override the appropriate visitor methods */
 
-  private:
-    /* TASK: Add whatever private members and methods you find necessary */
+  /**
+   * Sets the mode to "L" mode.
+   *
+   * @param node
+   *        Assignment node.
+   * @throws NodeError
+   *         Will not be thrown.
+   */
+  virtual void preVisit(AST::NAssignment* node) throw(AST::NodeError);
+
+  /**
+   * Sets the mode back to "R" mode.
+   *
+   * @param node
+   *        Assignment node.
+   * @throws NodeError
+   *         Will not be thrown.
+   */
+  virtual void betweenChildren(AST::NAssignment* node) throw(AST::NodeError);
+
+  /**
+   * Adds the identifier on the left-hand side to the symbol table.
+   *
+   * @param node
+   *        Assignment node.
+   * @throws NodeError
+   *         When a variable is redefined.
+   */
+  virtual void postVisit(AST::NAssignment* node) throw(AST::NodeError);
+
+  /**
+   * Visits the variable node and checks whether the variable has been
+   * declared before use.
+   *
+   * @param node
+   *        Variable node.
+   * @throws NodeError
+   *         When the variable is not available in the symbol table.
+   */
+  virtual void visit(AST::NVariable* node) throw(AST::NodeError);
+
+
+private:
+  /**
+   * Contains the symbol table.
+   */
+  SymbolTable* symbol_table;
+
+  /**
+   * Flag for controlling "L" and "R" mode in assignment nodes. We will need
+   * this to handle the very special case when you have a line which reads
+   * <code>a = a;</code>.
+   */
+  bool right_side_mode;
 };
 
 #endif
