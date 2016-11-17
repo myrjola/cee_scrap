@@ -5,6 +5,7 @@
 /*
  *  Copyright:
  *     Gabriel Hjort Blindell, 2012
+ *     Martin Yrjölä, 2016
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
@@ -48,10 +49,22 @@ int yycolumn = 1;
 %%
 
     /* Core rules */
-    /* TASK: Add missing rules */
+
+"print"                { return T_PRINT; }
+"="                    { return T_EQUAL; }
+";"                    { return T_SEMICOLON; }
+[a-zA-Z][a-zA-Z0-9_]*  { SAVE_TOKEN_STRING; return T_IDENTIFIER; }
+"+"                    { return T_PLUS; }
+"-"                    { return T_MINUS; }
+"*"                    { return T_MUL; }
+"/"                    { return T_DIV; }
+"("                    { return T_LPAREN; }
+")"                    { return T_RPAREN; }
+[0-9]+                 { SAVE_TOKEN_STRING; return T_NUMBER; }
+[ \r\t]*
 
     /* Ignore new lines and reset column counter */
-\n*                        { yycolumn = 1; }
+\n*                    { yycolumn = 1; }
 
     /* Indicate error on any other input */
-.                          { SAVE_TOKEN_STRING; return T_UNKNOWN; }
+.                      { SAVE_TOKEN_STRING; return T_UNKNOWN; }
