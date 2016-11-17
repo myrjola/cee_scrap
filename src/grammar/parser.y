@@ -77,7 +77,11 @@ void yyerror(const char*);
 /* Sets the operator precedence (this also defines the tokens for the
    operators)
  */
-/* TASK: Decide associativity order for operators (last means highest) */
+
+%right T_EQUAL
+%left T_MINUS T_PLUS
+%left T_MUL T_DIV
+%left UNARY
 
 /* Sets the starting rule
   */
@@ -86,7 +90,59 @@ void yyerror(const char*);
 %%
 
 /* Rules */
-/* TASK: Add missing rules */
+
+program : statement_list {
+    g_program = $$ = new NProgram($1, @$.first_line, @$.first_column);
+ }
+;
+
+statement_list:
+statement {
+    $$ = new NStatementList(@$.first_line, @$.first_column);
+    (*$$) << $1;
+}
+| statement_list statement { (*$1) << $2; };
+
+statement:
+assignment { $<statement>$ = $1; }
+| print { $<statement>$ = $1; };
+
+assignment : variable T_EQUAL expr T_SEMICOLON {
+    $$ = new NAssignment($1, $3, @$.first_line, @$.first_column);
+};
+
+print : T_PRINT expr T_SEMICOLON {
+    $$ = new NPrint($2, @$.first_line, @$.first_column);
+};
+
+expr:
+variable { $<variable>$ = $1; }
+| number { $<number>$ = $1; }
+| expr T_PLUS expr {
+    $$ = new NExpressionBinary($1, PLUS, $3,
+                               @$.first_line, @$.first_column);
+}
+| expr T_MINUS expr {
+    $$ = new NExpressionBinary($1, MINUS, $3,
+                               @$.first_line, @$.first_column);
+}
+| expr T_MUL expr {
+    $$ = new NExpressionBinary($1, MUL, $3,
+                               @$.first_line, @$.first_column);
+}
+| expr T_DIV expr {
+    $$ = new NExpressionBinary($1, DIV, $3,
+                               @$.first_line, @$.first_column);
+}
+| T_MINUS expr %prec UNARY {
+    $$ = new NExpressionUnary(MINUS, $2,
+                              @$.first_line, @$.first_column);
+}
+| T_LPAREN expr T_RPAREN { $$ = $2; };
+
+variable: T_IDENTIFIER { $$ = new NVariable($1, @$.first_line, @$.first_column); };
+
+number : T_NUMBER { $$ = new NNumber($1, @$.first_line, @$.first_column); };
 
 %%
 
