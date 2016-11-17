@@ -4,3 +4,5 @@
 /src/grammar/parser.tab.h
 /src/grammar/lex.yy.h
 /src/grammar/lex.yy.c
+/src/grammar/parser.tab.c
+/src/testing/parser/parser
