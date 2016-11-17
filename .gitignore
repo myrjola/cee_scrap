@@ -1,1 +1,6 @@
 /src/doc
+*.o
+/src/testing/scanner/scanner
+/src/grammar/parser.tab.h
+/src/grammar/lex.yy.h
+/src/grammar/lex.yy.c
