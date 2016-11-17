@@ -6,6 +6,7 @@
 /*
  *  Copyright:
  *     Gabriel Hjort Blindell, 2012
+ *     Martin Yrjölä, 2016
  *
  *  Permission is hereby granted, free of charge, to any person obtaining
  *  a copy of this software and associated documentation files (the
@@ -93,8 +94,7 @@ void yyerror(const char*);
 
 program : statement_list {
     g_program = $$ = new NProgram($1, @$.first_line, @$.first_column);
- }
-;
+ };
 
 statement_list:
 statement {
