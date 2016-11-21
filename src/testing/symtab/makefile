@@ -38,7 +38,7 @@ CPP_SOURCES = main.cpp ../../ast/ast.cpp ../../io/reporter.cpp \
 
 # Linux
 GCCCPP = g++
-GCCCPPFLAGS = -Wall -std=c++0x
+GCCCPPFLAGS = -Wall -std=c++0x -g
 GCCLINKFLAGS = -Wall
 LINUXOBJECTS = $(C_SOURCES:.c=.o) $(CPP_SOURCES:.cpp=.o)
 
@@ -61,7 +61,7 @@ $(SCANNER_OUTPUT_FILE): $(SCANNER_INPUT_FILE) $(PARSER_HEADER_FILE)
 	flex --header-file=$(SCANNER_HEADER_FILE) -o $(SCANNER_OUTPUT_FILE) $<
 
 $(PARSER_OUTPUT_FILE) $(PARSER_HEADER_FILE): $(PARSER_INPUT_FILE)
-	bison --defines=$(PARSER_HEADER_FILE) --report-file=$(PARSER_REPORT_FILE) \
+	/usr/local/Cellar/bison/3.0.4/bin/bison --defines=$(PARSER_HEADER_FILE) --report-file=$(PARSER_REPORT_FILE) \
           -o $(PARSER_OUTPUT_FILE) $<
 
 clean:
